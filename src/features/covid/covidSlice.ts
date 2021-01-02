@@ -1,12 +1,12 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { RootState } from '../../app/store';
-import datajson from './data.json';
+import dataJson from './data.json';
 import dataJsonDaily from './dataDaily.json';
 
 const apiUrl = 'https://covid19.mathdro.id/api';
 
-type APIDATA = typeof datajson;
+type APIDATA = typeof dataJson;
 type APIDATADAILY = typeof dataJsonDaily;
 
 type covidState = {
@@ -14,19 +14,18 @@ type covidState = {
   country: string;
   dailyData: APIDATADAILY;
 };
-
 const initialState: covidState = {
   data: {
     confirmed: {
-      value: 83963772,
+      value: 10667217,
       detail: 'https://covid19.mathdro.id/api/confirmed',
     },
     recovered: {
-      value: 47289078,
+      value: 5464367,
       detail: 'https://covid19.mathdro.id/api/recovered',
     },
     deaths: {
-      value: 1827540,
+      value: 515646,
       detail: 'https://covid19.mathdro.id/api/deaths',
     },
     dailySummary: 'https://covid19.mathdro.id/api/daily',
@@ -41,7 +40,7 @@ const initialState: covidState = {
       pattern: 'https://covid19.mathdro.id/api/countries/[country]',
       example: 'https://covid19.mathdro.id/api/countries/USA',
     },
-    lastUpdate: '2021-01-02T05:22:33.000Z',
+    lastUpdate: '2020-07-02T02:33:53.000Z',
   },
   country: '',
   dailyData: [
@@ -96,11 +95,11 @@ export const fetchAsyncGetDaily = createAsyncThunk(
 export const fetchAsyncGetCountry = createAsyncThunk(
   'covid/getCountry',
   async (country: string) => {
-    let countryUrl = apiUrl;
+    let dynamicUrl = apiUrl;
     if (country) {
-      countryUrl = `${apiUrl}countries/${country}`;
+      dynamicUrl = `${apiUrl}/countries/${country}`;
     }
-    const { data } = await axios.get<APIDATA>(countryUrl);
+    const { data } = await axios.get<APIDATA>(dynamicUrl);
     return { data: data, country: country };
   }
 );
